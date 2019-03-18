@@ -19,7 +19,7 @@
     "lint:fix": "ethereumjs-config-lint-fix",
     "test": "npm run lint && npm run test:node && npm run test:browser",
     "test:browser": "npm run build && karma start karma.conf.js",
-    "test:node": "npm run build && istanbul test mocha -- --reporter spec",
+    "test:node": "npm run build && istanbul test mocha -- --recursive --reporter spec",
     "tsc": "ethereumjs-config-tsc",
     "tslint": "ethereumjs-config-tslint",
     "tslint:fix": "ethereumjs-config-tslint-fix"

@@ -2,10 +2,10 @@ module.exports = function (config) {
   config.set({
     frameworks: ['browserify', 'detectBrowsers', 'mocha'],
     files: [
-      'test/*.js'
+      'test/**/*.js'
     ],
     preprocessors: {
-      'test/*.js': ['browserify', 'env']
+      'test/**/*.js': ['browserify', 'env']
     },
     singleRun: true,
     plugins: [
