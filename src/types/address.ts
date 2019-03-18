@@ -2,9 +2,12 @@ const assert = require('assert')
 import BN = require('bn.js')
 import { toBuffer, zeros } from '../bytes'
 import {
-  isValidAddress, toChecksumAddress,
-  pubToAddress, privateToAddress,
-  generateAddress, generateAddress2
+  isValidAddress,
+  toChecksumAddress,
+  pubToAddress,
+  privateToAddress,
+  generateAddress,
+  generateAddress2,
 } from '../account'
 
 export default class Address {
