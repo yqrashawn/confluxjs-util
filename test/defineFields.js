@@ -29,12 +29,12 @@ describe('define', function () {
   it('should trim zeros', function () {
     var someOb = {}
     ethUtil.defineProperties(someOb, fields)
-      // Define Properties
+    // Define Properties
     someOb.r = '0x00004'
-    assert.equal(someOb.r.toString('hex'), '04')
+    assert.strictEqual(someOb.r.toString('hex'), '04')
 
     someOb.r = Buffer.from([0, 0, 0, 0, 4])
-    assert.equal(someOb.r.toString('hex'), '04')
+    assert.strictEqual(someOb.r.toString('hex'), '04')
   })
 
   it('shouldn\'t allow wrong size for exact size requirements', function () {
@@ -74,16 +74,16 @@ describe('define', function () {
     ]
 
     ethUtil.defineProperties(someOb, fields, data)
-    assert.deepEqual(someOb.toJSON(true), expected, 'should produce the correctly labeled object')
+    assert.deepStrictEqual(someOb.toJSON(true), expected, 'should produce the correctly labeled object')
 
     var someOb2 = {}
     var rlpEncoded = someOb.serialize().toString('hex')
     ethUtil.defineProperties(someOb2, fields, rlpEncoded)
-    assert.equal(someOb2.serialize().toString('hex'), rlpEncoded, 'the constuctor should accept rlp encoded buffers')
+    assert.strictEqual(someOb2.serialize().toString('hex'), rlpEncoded, 'the constuctor should accept rlp encoded buffers')
 
     var someOb3 = {}
     ethUtil.defineProperties(someOb3, fields, expectedArray)
-    assert.deepEqual(someOb.toJSON(), expectedArray, 'should produce the correctly object')
+    assert.deepStrictEqual(someOb.toJSON(), expectedArray, 'should produce the correctly object')
   })
 
   it('it should not accept invalid values in the constuctor', function () {
@@ -107,10 +107,10 @@ describe('define', function () {
     }
 
     ethUtil.defineProperties(someOb, fields, data)
-    assert.equal(someOb.blah.toString(), 'test')
+    assert.strictEqual(someOb.blah.toString(), 'test')
     someOb.blah = 'lol'
-    assert.equal(someOb.blah.toString(), 'lol')
-    assert.equal(someOb.aword.toString(), 'lol')
+    assert.strictEqual(someOb.blah.toString(), 'lol')
+    assert.strictEqual(someOb.aword.toString(), 'lol')
   })
 
   it('alias should work #2', function () {
@@ -118,7 +118,7 @@ describe('define', function () {
     var data = { blah: '42' }
 
     ethUtil.defineProperties(someOb, fields, data)
-    assert.equal(someOb.blah, '42')
-    assert.equal(someOb.aword, '42')
+    assert.strictEqual(someOb.blah.toString(), '42')
+    assert.strictEqual(someOb.aword.toString(), '42')
   })
 })

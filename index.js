@@ -267,7 +267,7 @@ exports.isValidPrivate = function (privateKey) {
 exports.isValidPublic = function (publicKey, sanitize) {
   if (publicKey.length === 64) {
     // Convert to SEC1 for secp256k1
-    return secp256k1.publicKeyVerify(Buffer.concat([ Buffer.from([4]), publicKey ]))
+    return secp256k1.publicKeyVerify(Buffer.concat([Buffer.from([4]), publicKey]))
   }
 
   if (!sanitize) {
@@ -330,7 +330,7 @@ exports.ecsign = function (msgHash, privateKey) {
   var ret = {}
   ret.r = sig.signature.slice(0, 32)
   ret.s = sig.signature.slice(32, 64)
-  ret.v = sig.recovery + 27
+  ret.v = sig.recovery
   return ret
 }
 
@@ -357,7 +357,7 @@ exports.hashPersonalMessage = function (message) {
  */
 exports.ecrecover = function (msgHash, v, r, s) {
   var signature = Buffer.concat([exports.setLength(r, 32), exports.setLength(s, 32)], 64)
-  var recovery = v - 27
+  var recovery = v
   if (recovery !== 0 && recovery !== 1) {
     throw new Error('Invalid signature v value')
   }
@@ -374,7 +374,7 @@ exports.ecrecover = function (msgHash, v, r, s) {
  */
 exports.toRpcSig = function (v, r, s) {
   // NOTE: with potential introduction of chainId this might need to be updated
-  if (v !== 27 && v !== 28) {
+  if (v !== 0 && v !== 1) {
     throw new Error('Invalid recovery id')
   }
 
@@ -383,7 +383,7 @@ exports.toRpcSig = function (v, r, s) {
   return exports.bufferToHex(Buffer.concat([
     exports.setLengthLeft(r, 32),
     exports.setLengthLeft(s, 32),
-    exports.toBuffer(v - 27)
+    exports.toBuffer(v)
   ]))
 }
 
@@ -403,9 +403,6 @@ exports.fromRpcSig = function (sig) {
 
   var v = sig[64]
   // support both versions of `eth_sign` responses
-  if (v < 27) {
-    v += 27
-  }
 
   return {
     v: v,
@@ -525,7 +522,7 @@ exports.isValidSignature = function (v, r, s, homestead) {
     return false
   }
 
-  if (v !== 27 && v !== 28) {
+  if (v !== 0 && v !== 1) {
     return false
   }
 

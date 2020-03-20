@@ -1,5 +1,5 @@
 {
-  "name": "ethereumjs-util",
+  "name": "@yqrashawn/confluxjs-util",
   "version": "5.1.1",
   "description": "a collection of utility functions for Ethereum",
   "main": "index.js",
@@ -15,13 +15,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ethereumjs/ethereumjs-util.git"
+    "url": "https://github.com/yqrashawn/confluxjs-util.git"
   },
   "keywords": [
     "ethereum",
     "utilties"
   ],
-  "author": "mjbecze <mjbecze@gmail.com>",
+  "author": "yqrashawn <namy.19@gmail.com>",
   "contributors": [
     {
       "name": "Tim Coulter",
@@ -95,9 +95,9 @@
   ],
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/ethereumjs/ethereumjs-util/issues"
+    "url": "https://github.com/yqrashawn/confluxjs-util/issues"
   },
-  "homepage": "https://github.com/ethereumjs/ethereumjs-util",
+  "homepage": "https://github.com/yqrashawn/confluxjs-util",
   "dependencies": {
     "bn.js": "^4.8.0",
     "create-hash": "^1.1.2",
