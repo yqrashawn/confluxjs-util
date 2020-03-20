@@ -367,7 +367,7 @@ exports.ecsign = function (msgHash, privateKey) {
   const ret = {}
   ret.r = sig.signature.slice(0, 32)
   ret.s = sig.signature.slice(32, 64)
-  ret.v = sig.recovery + 27
+  ret.v = sig.recovery
   return ret
 }
 
@@ -380,7 +380,7 @@ exports.ecsign = function (msgHash, privateKey) {
  * @returns {Buffer} hash
  */
 exports.hashPersonalMessage = function (message) {
-  const prefix = exports.toBuffer('\u0019Ethereum Signed Message:\n' + message.length.toString())
+  const prefix = exports.toBuffer('\u0019Conflux Signed Message:\n' + message.length.toString())
   return exports.keccak(Buffer.concat([prefix, message]))
 }
 
@@ -394,7 +394,7 @@ exports.hashPersonalMessage = function (message) {
  */
 exports.ecrecover = function (msgHash, v, r, s) {
   const signature = Buffer.concat([exports.setLength(r, 32), exports.setLength(s, 32)], 64)
-  const recovery = v - 27
+  const recovery = v
   if (recovery !== 0 && recovery !== 1) {
     throw new Error('Invalid signature v value')
   }
@@ -411,7 +411,7 @@ exports.ecrecover = function (msgHash, v, r, s) {
  */
 exports.toRpcSig = function (v, r, s) {
   // NOTE: with potential introduction of chainId this might need to be updated
-  if (v !== 27 && v !== 28) {
+  if (v !== 0 && v !== 1) {
     throw new Error('Invalid recovery id')
   }
 
@@ -420,7 +420,7 @@ exports.toRpcSig = function (v, r, s) {
   return exports.bufferToHex(Buffer.concat([
     exports.setLengthLeft(r, 32),
     exports.setLengthLeft(s, 32),
-    exports.toBuffer(v - 27)
+    exports.toBuffer(v)
   ]))
 }
 
@@ -440,9 +440,9 @@ exports.fromRpcSig = function (sig) {
 
   let v = sig[64]
   // support both versions of `eth_sign` responses
-  if (v < 27) {
-    v += 27
-  }
+  // if (v < 27) {
+  //   v += 27
+  // }
 
   return {
     v: v,
@@ -573,7 +573,7 @@ exports.isValidSignature = function (v, r, s, homestead) {
     return false
   }
 
-  if (v !== 27 && v !== 28) {
+  if (v !== 0 && v !== 1) {
     return false
   }
 

@@ -481,7 +481,7 @@ describe('ecsign', function () {
     var sig = ethUtils.ecsign(echash, ecprivkey)
     assert.deepEqual(sig.r, Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex'))
     assert.deepEqual(sig.s, Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex'))
-    assert.equal(sig.v, 27)
+    assert.equal(sig.v, 0)
   })
 })
 
@@ -489,7 +489,7 @@ describe('ecrecover', function () {
   it('should recover a public key', function () {
     var r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     var s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
-    var pubkey = ethUtils.ecrecover(echash, 27, r, s)
+    var pubkey = ethUtils.ecrecover(echash, 0, r, s)
     assert.deepEqual(pubkey, ethUtils.privateToPublic(ecprivkey))
   })
   it('should fail on an invalid signature (v = 21)', function () {
@@ -503,14 +503,14 @@ describe('ecrecover', function () {
     var r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     var s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
     assert.throws(function () {
-      ethUtils.ecrecover(echash, 29, r, s)
+      ethUtils.ecrecover(echash, 2, r, s)
     })
   })
   it('should fail on an invalid signature (swapped points)', function () {
     var r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     var s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
     assert.throws(function () {
-      ethUtils.ecrecover(echash, 27, s, r)
+      ethUtils.ecrecover(echash, 0, s, r)
     })
   })
 })
@@ -518,7 +518,7 @@ describe('ecrecover', function () {
 describe('hashPersonalMessage', function () {
   it('should produce a deterministic hash', function () {
     var h = ethUtils.hashPersonalMessage(Buffer.from('Hello world'))
-    assert.deepEqual(h, Buffer.from('8144a6fa26be252b86456491fbcd43c1de7e022241845ffea1c3df066f7cfede', 'hex'))
+    assert.deepEqual(h, Buffer.from('710c3f393a54d09c1affcbb880167be54e6b346a5f21ec7472060b8f7ef43553', 'hex'))
   })
 })
 
@@ -526,12 +526,12 @@ describe('isValidSignature', function () {
   it('should fail on an invalid signature (shorter r))', function () {
     var r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1ab', 'hex')
     var s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
-    assert.equal(ethUtils.isValidSignature(27, r, s), false)
+    assert.equal(ethUtils.isValidSignature(0, r, s), false)
   })
   it('should fail on an invalid signature (shorter s))', function () {
     var r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     var s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca', 'hex')
-    assert.equal(ethUtils.isValidSignature(27, r, s), false)
+    assert.equal(ethUtils.isValidSignature(0, r, s), false)
   })
   it('should fail on an invalid signature (v = 21)', function () {
     var r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
@@ -541,12 +541,12 @@ describe('isValidSignature', function () {
   it('should fail on an invalid signature (v = 29)', function () {
     var r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     var s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
-    assert.equal(ethUtils.isValidSignature(29, r, s), false)
+    assert.equal(ethUtils.isValidSignature(2, r, s), false)
   })
   it('should work otherwise', function () {
     var r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     var s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
-    assert.equal(ethUtils.isValidSignature(27, r, s), true)
+    assert.equal(ethUtils.isValidSignature(0, r, s), true)
   })
   // FIXME: add homestead test
 })
@@ -604,9 +604,9 @@ describe('message sig', function () {
   const s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
 
   it('should return hex strings that the RPC can use', function () {
-    assert.equal(ethUtils.toRpcSig(27, r, s), '0x99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca6600')
+    assert.equal(ethUtils.toRpcSig(0, r, s), '0x99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca6600')
     assert.deepEqual(ethUtils.fromRpcSig('0x99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca6600'), {
-      v: 27,
+      v: 0,
       r: r,
       s: s
     })
@@ -622,12 +622,12 @@ describe('message sig', function () {
   })
 
   it('pad short r and s values', function () {
-    assert.equal(ethUtils.toRpcSig(27, r.slice(20), s.slice(20)), '0x00000000000000000000000000000000000000004a1579cf389ef88b20a1abe90000000000000000000000000000000000000000326fa689f228040429e3ca6600')
+    assert.equal(ethUtils.toRpcSig(0, r.slice(20), s.slice(20)), '0x00000000000000000000000000000000000000004a1579cf389ef88b20a1abe90000000000000000000000000000000000000000326fa689f228040429e3ca6600')
   })
 
   it('should throw on invalid v value', function () {
     assert.throws(function () {
-      ethUtils.toRpcSig(1, r, s)
+      ethUtils.toRpcSig(2, r, s)
     })
   })
 })
