@@ -1,6 +1,6 @@
 {
-  "name": "@yqrashawn/confluxjs-util",
-  "version": "6.2.1",
+  "name": "cfx-util",
+  "version": "0.0.1",
   "description": "a collection of utility functions for Ethereum",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ethereumjs/ethereumjs-util.git"
+    "url": "https://github.com/yqrashawn/confluxjs-util.git"
   },
   "keywords": [
     "ethereum",
@@ -82,9 +82,9 @@
   ],
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/ethereumjs/ethereumjs-util/issues"
+    "url": "https://github.com/yqrashawn/confluxjs-util/issues"
   },
-  "homepage": "https://github.com/ethereumjs/ethereumjs-util",
+  "homepage": "https://github.com/yqrashawn/confluxjs-util",
   "dependencies": {
     "@types/bn.js": "^4.11.3",
     "bn.js": "^4.11.0",
