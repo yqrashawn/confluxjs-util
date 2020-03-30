@@ -17,8 +17,22 @@ export const zeroAddress = function(): string {
 /**
  * Checks if the address is a valid. Accepts checksummed addresses too.
  */
-export const isValidAddress = function(address: string): boolean {
+export const isValidAddress = function(address: string, addressType?: string): boolean {
+  if (addressType === 'account') {
+    return isValidAddress(address) && isValidAccountAddress(address)
+  }
+  if (addressType === 'contract') {
+    return isValidAddress(address) && isValidContractAddress(address)
+  }
   return /^0x[0-9a-fA-F]{40}$/.test(address)
+}
+
+export const isValidAccountAddress = function(address: string): boolean {
+  return /^0x1[0-9a-fA-F]{39}$/.test(address)
+}
+
+export const isValidContractAddress = function(address: string): boolean {
+  return /^0x8[0-9a-fA-F]{39}$/.test(address)
 }
 
 /**
@@ -79,11 +93,19 @@ export const generateAddress = function(from: Buffer, nonce: Buffer): Buffer {
   if (nonceBN.isZero()) {
     // in RLP we want to encode null in the case of zero nonce
     // read the RLP documentation for an answer if you dare
-    return rlphash([from, null]).slice(-20)
+    return toBuffer(
+      `0x8${rlphash([from, null])
+        .slice(-20)
+        .toString('hex')
+        .slice(1)}`,
+    )
   }
 
   // Only take the lower 160bits of the hash
-  return rlphash([from, Buffer.from(nonceBN.toArray())]).slice(-20)
+  const address = rlphash([from, Buffer.from(nonceBN.toArray())])
+    .slice(-20)
+    .toString('hex')
+  return toBuffer(`0x8${address.slice(1)}`)
 }
 
 /**
@@ -107,8 +129,10 @@ export const generateAddress2 = function(
   const address = keccak256(
     Buffer.concat([Buffer.from('ff', 'hex'), fromBuf, saltBuf, keccak256(initCodeBuf)]),
   )
+    .slice(-20)
+    .toString('hex')
 
-  return address.slice(-20)
+  return toBuffer(`0x8${address.slice(1)}`)
 }
 
 /**
@@ -151,14 +175,25 @@ export const isValidPublic = function(publicKey: Buffer, sanitize: boolean = fal
  * @param pubKey The two points of an uncompressed key, unless sanitize is enabled
  * @param sanitize Accept public keys in other formats
  */
-export const pubToAddress = function(pubKey: Buffer, sanitize: boolean = false): Buffer {
+export const pubToAddress = function(
+  pubKey: Buffer,
+  sanitize: boolean = false,
+  contractAddress: boolean = false,
+): Buffer {
   pubKey = toBuffer(pubKey)
   if (sanitize && pubKey.length !== 64) {
     pubKey = secp256k1.publicKeyConvert(pubKey, false).slice(1)
   }
   assert(pubKey.length === 64)
   // Only take the lower 160bits of the hash
-  return keccak(pubKey).slice(-20)
+  const address = keccak(pubKey)
+    .slice(-20)
+    .toString('hex')
+  if (contractAddress) {
+    return toBuffer(`0x8${address.slice(1)}`)
+  } else {
+    return toBuffer(`0x1${address.slice(1)}`)
+  }
 }
 export const publicToAddress = pubToAddress
 
@@ -166,8 +201,11 @@ export const publicToAddress = pubToAddress
  * Returns the ethereum address of a given private key.
  * @param privateKey A private key must be 256 bits wide
  */
-export const privateToAddress = function(privateKey: Buffer): Buffer {
-  return publicToAddress(privateToPublic(privateKey))
+export const privateToAddress = function(
+  privateKey: Buffer,
+  contractAddress: boolean = false,
+): Buffer {
+  return publicToAddress(privateToPublic(privateKey), false, contractAddress)
 }
 
 /**

@@ -13,6 +13,8 @@ import {
   isPrecompiled,
   isValidChecksumAddress,
   isValidAddress,
+  isValidAccountAddress,
+  isValidContractAddress,
   toChecksumAddress,
 } from '../src'
 const eip1014Testdata = require('./testdata/eip1014Examples.json')
@@ -130,7 +132,7 @@ describe('publicToAddress', function() {
       '3a443d8381a6798a70c6ff9304bdc8cb0163c23211d11628fae52ef9e0dca11a001cf066d56a8156fc201cd5df8a36ef694eecd258903fca7086c1fae7441e1d',
       'hex',
     )
-    const address = '2f015c60e0be116b1f0cd534704db9c92118fb6a'
+    const address = '1f015c60e0be116b1f0cd534704db9c92118fb6a'
     const r = publicToAddress(pubKey)
     assert.equal(r.toString('hex'), address)
   })
@@ -139,7 +141,7 @@ describe('publicToAddress', function() {
       '043a443d8381a6798a70c6ff9304bdc8cb0163c23211d11628fae52ef9e0dca11a001cf066d56a8156fc201cd5df8a36ef694eecd258903fca7086c1fae7441e1d',
       'hex',
     )
-    const address = '2f015c60e0be116b1f0cd534704db9c92118fb6a'
+    const address = '1f015c60e0be116b1f0cd534704db9c92118fb6a'
     const r = publicToAddress(pubKey, true)
     assert.equal(r.toString('hex'), address)
   })
@@ -167,7 +169,7 @@ describe('publicToAddress 0x', function() {
   it('should produce an address given a public key', function() {
     const pubKey: any =
       '0x3a443d8381a6798a70c6ff9304bdc8cb0163c23211d11628fae52ef9e0dca11a001cf066d56a8156fc201cd5df8a36ef694eecd258903fca7086c1fae7441e1d'
-    const address = '2f015c60e0be116b1f0cd534704db9c92118fb6a'
+    const address = '1f015c60e0be116b1f0cd534704db9c92118fb6a'
     const r = publicToAddress(pubKey)
     assert.equal(r.toString('hex'), address)
   })
@@ -294,7 +296,7 @@ describe('privateToPublic', function() {
 
 describe('privateToAddress', function() {
   it('should produce an address given a private key', function() {
-    const address = '2f015c60e0be116b1f0cd534704db9c92118fb6a'
+    const address = '1f015c60e0be116b1f0cd534704db9c92118fb6a'
     // Our private key
     const privateKey = Buffer.from([
       234,
@@ -341,7 +343,7 @@ describe('generateAddress', function() {
       Buffer.from('990ccf8a0de58091c028d6ff76bb235ee67c1c39', 'utf8'),
       toBuffer(14),
     ).toString('hex')
-    assert.equal(add.toString('hex'), '936a4295d8d74e310c0c95f0a63e53737b998d12')
+    assert.equal(add.toString('hex'), '836a4295d8d74e310c0c95f0a63e53737b998d12')
   })
 })
 
@@ -351,7 +353,7 @@ describe('generateAddress with hex prefix', function() {
       toBuffer('0x990ccf8a0de58091c028d6ff76bb235ee67c1c39'),
       toBuffer(14),
     ).toString('hex')
-    assert.equal(add.toString('hex'), 'd658a4b8247c14868f3c512fa5cbb6e458e4a989')
+    assert.equal(add.toString('hex'), '8658a4b8247c14868f3c512fa5cbb6e458e4a989')
   })
 })
 
@@ -361,7 +363,7 @@ describe('generateAddress with nonce 0 (special case)', function() {
       toBuffer('0x990ccf8a0de58091c028d6ff76bb235ee67c1c39'),
       toBuffer(0),
     ).toString('hex')
-    assert.equal(add.toString('hex'), 'bfa69ba91385206bfdd2d8b9c1a5d6c10097a85b')
+    assert.equal(add.toString('hex'), '8fa69ba91385206bfdd2d8b9c1a5d6c10097a85b')
   })
 })
 
@@ -526,5 +528,53 @@ describe('.isValidAddress()', function() {
     assert.equal(isValidAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6aa'), false)
     assert.equal(isValidAddress('0X52908400098527886E0F7030069857D2E4169EE7'), false)
     assert.equal(isValidAddress('x2f015c60e0be116b1f0cd534704db9c92118fb6a'), false)
+  })
+  it('should return true', function() {
+    assert.equal(isValidAccountAddress('0x1f015c60e0be116b1f0cd534704db9c92118fb6a'), true)
+    assert.equal(isValidAccountAddress('0x12908400098527886E0F7030069857D2E4169EE7'), true)
+  })
+  it('should return false', function() {
+    assert.equal(isValidAccountAddress('0x82908400098527886E0F7030069857D2E4169EE7'), false)
+    assert.equal(isValidAccountAddress('2f015c60e0be116b1f0cd534704db9c92118fb6a'), false)
+    assert.equal(isValidAccountAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6'), false)
+    assert.equal(isValidAccountAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6aa'), false)
+    assert.equal(isValidAccountAddress('0X52908400098527886E0F7030069857D2E4169EE7'), false)
+    assert.equal(isValidAccountAddress('x2f015c60e0be116b1f0cd534704db9c92118fb6a'), false)
+  })
+  it('should return true', function() {
+    assert.equal(isValidContractAddress('0x8f015c60e0be116b1f0cd534704db9c92118fb6a'), true)
+    assert.equal(isValidContractAddress('0x82908400098527886E0F7030069857D2E4169EE7'), true)
+  })
+  it('should return false', function() {
+    assert.equal(isValidContractAddress('0x12908400098527886E0F7030069857D2E4169EE7'), false)
+    assert.equal(isValidContractAddress('2f015c60e0be116b1f0cd534704db9c92118fb6a'), false)
+    assert.equal(isValidContractAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6'), false)
+    assert.equal(isValidContractAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6aa'), false)
+    assert.equal(isValidContractAddress('0X52908400098527886E0F7030069857D2E4169EE7'), false)
+    assert.equal(isValidContractAddress('x2f015c60e0be116b1f0cd534704db9c92118fb6a'), false)
+  })
+  it('should return true', function() {
+    assert.equal(isValidAddress('0x1f015c60e0be116b1f0cd534704db9c92118fb6a', 'account'), true)
+    assert.equal(isValidAddress('0x12908400098527886E0F7030069857D2E4169EE7', 'account'), true)
+  })
+  it('should return false', function() {
+    assert.equal(isValidAddress('0x82908400098527886E0F7030069857D2E4169EE7', 'account'), false)
+    assert.equal(isValidAddress('2f015c60e0be116b1f0cd534704db9c92118fb6a', 'account'), false)
+    assert.equal(isValidAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6', 'account'), false)
+    assert.equal(isValidAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6aa', 'account'), false)
+    assert.equal(isValidAddress('0X52908400098527886E0F7030069857D2E4169EE7', 'account'), false)
+    assert.equal(isValidAddress('x2f015c60e0be116b1f0cd534704db9c92118fb6a', 'account'), false)
+  })
+  it('should return true', function() {
+    assert.equal(isValidAddress('0x8f015c60e0be116b1f0cd534704db9c92118fb6a', 'contract'), true)
+    assert.equal(isValidAddress('0x82908400098527886E0F7030069857D2E4169EE7', 'contract'), true)
+  })
+  it('should return false', function() {
+    assert.equal(isValidAddress('0x12908400098527886E0F7030069857D2E4169EE7', 'contract'), false)
+    assert.equal(isValidAddress('2f015c60e0be116b1f0cd534704db9c92118fb6a', 'contract'), false)
+    assert.equal(isValidAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6', 'contract'), false)
+    assert.equal(isValidAddress('0x2f015c60e0be116b1f0cd534704db9c92118fb6aa', 'contract'), false)
+    assert.equal(isValidAddress('0X52908400098527886E0F7030069857D2E4169EE7', 'contract'), false)
+    assert.equal(isValidAddress('x2f015c60e0be116b1f0cd534704db9c92118fb6a', 'contract'), false)
   })
 })
