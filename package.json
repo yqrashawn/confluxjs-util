@@ -1,11 +1,12 @@
 {
   "name": "cfx-util",
-  "version": "0.0.1-b",
+  "version": "0.0.1-c",
   "description": "a collection of utility functions for Ethereum",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build": "ethereumjs-config-build",
