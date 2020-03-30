@@ -140,6 +140,9 @@ export const addHexPrefix = function(str: string): string {
   return ethjsUtil.isHexPrefixed(str) ? str : '0x' + str
 }
 
+export const stripHexPrefix = ethjsUtil.stripHexPrefix
+
+export const intToHex = ethjsUtil.intToHex
 /**
  * Converts a `Buffer` or `Array` to JSON.
  * @param ba (Buffer|Array)
