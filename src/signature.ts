@@ -23,7 +23,7 @@ export const ecsign = function(
   const ret = {
     r: sig.signature.slice(0, 32),
     s: sig.signature.slice(32, 64),
-    v: chainId ? recovery + (chainId * 2 + 35) : recovery + 27,
+    v: recovery + 27,
   }
 
   return ret
@@ -142,7 +142,7 @@ export const hashPersonalMessage = function(message: Buffer): Buffer {
 }
 
 function calculateSigRecovery(v: number, chainId?: number): number {
-  return chainId ? v - (2 * chainId + 35) : v - 27
+  return v - 27
 }
 
 function isValidSigRecovery(recovery: number): boolean {

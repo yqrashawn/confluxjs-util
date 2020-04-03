@@ -44,7 +44,7 @@ describe('ecsign', function() {
       sig.s,
       Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex'),
     )
-    assert.equal(sig.v, 41)
+    assert.equal(sig.v, 27)
   })
 })
 
@@ -59,7 +59,7 @@ describe('ecrecover', function() {
   it('should recover a public key (chainId = 3)', function() {
     const r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     const s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
-    const v = 41
+    const v = 27
     const pubkey = ecrecover(echash, v, r, s, chainId)
     assert.deepEqual(pubkey, privateToPublic(ecprivkey))
   })
@@ -150,7 +150,7 @@ describe('isValidSignature', function() {
   it('should work otherwise(chainId=3)', function() {
     const r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     const s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
-    const v = 41
+    const v = 27
     assert.equal(isValidSignature(v, r, s, false, chainId), true)
   })
   // FIXME: add homestead test
