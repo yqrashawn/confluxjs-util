@@ -1,21 +1,19 @@
 # SYNOPSIS
 
-[![NPM Package](https://img.shields.io/npm/v/ethereumjs-util.svg)](https://www.npmjs.org/package/ethereumjs-util)
-[![Actions Status](https://github.com/ethereumjs/ethereumjs-util/workflows/Build/badge.svg)](https://github.com/ethereumjs/ethereumjs-util/actions)
-[![Coverage Status](https://img.shields.io/coveralls/ethereumjs/ethereumjs-util.svg)](https://coveralls.io/r/ethereumjs/ethereumjs-util)
-[![Gitter](https://img.shields.io/gitter/room/ethereum/ethereumjs-lib.svg)](https://gitter.im/ethereum/ethereumjs-lib)
+[![NPM Package](https://img.shields.io/npm/v/cfx-util.svg)](https://www.npmjs.org/package/cfx-util)
+[![Actions Status](https://github.com/yqrashawn/confluxjs-util/workflows/Build/badge.svg)](https://github.com/yqrashawn/confluxjs-util/actions)
 
-A collection of utility functions for Ethereum. It can be used in Node.js and in the browser with [browserify](http://browserify.org/).
+A collection of utility functions for Conflux. It can be used in Node.js and in the browser with [browserify](http://browserify.org/).
 
 # INSTALL
 
-`npm install ethereumjs-util`
+`yarn add cfx-util` or `npm install cfx-util`
 
 # USAGE
 
 ```js
 import assert from 'assert'
-import { isValidChecksumAddress, unpad, BN } from 'ethereumjs-util'
+import { isValidChecksumAddress, unpad, BN } from 'cfx-util'
 
 const address = '0x2F015C60E0be116B1f0CD534704Db9c92118FB6A'
 assert.ok(isValidChecksumAddress(address))
@@ -68,17 +66,11 @@ The following methods are available provided by [ethjs-util](https://github.com/
 
 ### Re-Exports
 
-Additionally `ethereumjs-util` re-exports a few commonly-used libraries. These include:
+Additionally `cfx-util` re-exports a few commonly-used libraries. These include:
 
 - `BN` ([bn.js](https://github.com/indutny/bn.js))
 - `rlp` ([rlp](https://github.com/ethereumjs/rlp))
 - `secp256k1` ([secp256k1](https://github.com/cryptocoinjs/secp256k1-node/))
-
-# EthereumJS
-
-See our organizational [documentation](https://ethereumjs.readthedocs.io) for an introduction to `EthereumJS` as well as information on current standards and best practices.
-
-If you want to join for work or do improvements on the libraries have a look at our [contribution guidelines](https://ethereumjs.readthedocs.io/en/latest/contributing.html).
 
 # LICENSE
 
