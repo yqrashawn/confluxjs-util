@@ -91,7 +91,7 @@ describe('hashPersonalMessage', function() {
     const h = hashPersonalMessage(Buffer.from('Hello world'))
     assert.deepEqual(
       h,
-      Buffer.from('8144a6fa26be252b86456491fbcd43c1de7e022241845ffea1c3df066f7cfede', 'hex'),
+      Buffer.from('710c3f393a54d09c1affcbb880167be54e6b346a5f21ec7472060b8f7ef43553', 'hex'),
     )
   })
 })
