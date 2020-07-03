@@ -35,7 +35,7 @@ describe('ecsign', function() {
   })
 
   it('should produce a signature for Ropsten testnet', function() {
-    const sig = ecsign(echash, ecprivkey, chainId)
+    const sig = ecsign(echash, ecprivkey)
     assert.deepEqual(
       sig.r,
       Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex'),
@@ -60,7 +60,7 @@ describe('ecrecover', function() {
     const r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     const s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
     const v = 27
-    const pubkey = ecrecover(echash, v, r, s, chainId)
+    const pubkey = ecrecover(echash, v, r, s)
     assert.deepEqual(pubkey, privateToPublic(ecprivkey))
   })
   it('should fail on an invalid signature (v = 21)', function() {
@@ -151,7 +151,7 @@ describe('isValidSignature', function() {
     const r = Buffer.from('99e71a99cb2270b8cac5254f9e99b6210c6c10224a1579cf389ef88b20a1abe9', 'hex')
     const s = Buffer.from('129ff05af364204442bdb53ab6f18a99ab48acc9326fa689f228040429e3ca66', 'hex')
     const v = 27
-    assert.equal(isValidSignature(v, r, s, false, chainId), true)
+    assert.equal(isValidSignature(v, r, s, false), true)
   })
   // FIXME: add homestead test
 })

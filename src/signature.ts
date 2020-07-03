@@ -12,11 +12,7 @@ export interface ECDSASignature {
 /**
  * Returns the ECDSA signature of a message hash.
  */
-export const ecsign = function(
-  msgHash: Buffer,
-  privateKey: Buffer,
-  chainId?: number,
-): ECDSASignature {
+export const ecsign = function(msgHash: Buffer, privateKey: Buffer): ECDSASignature {
   const sig = secp256k1.sign(msgHash, privateKey)
   const recovery: number = sig.recovery
 
@@ -33,15 +29,9 @@ export const ecsign = function(
  * ECDSA public key recovery from signature.
  * @returns Recovered public key
  */
-export const ecrecover = function(
-  msgHash: Buffer,
-  v: number,
-  r: Buffer,
-  s: Buffer,
-  chainId?: number,
-): Buffer {
+export const ecrecover = function(msgHash: Buffer, v: number, r: Buffer, s: Buffer): Buffer {
   const signature = Buffer.concat([setLength(r, 32), setLength(s, 32)], 64)
-  const recovery = calculateSigRecovery(v, chainId)
+  const recovery = calculateSigRecovery(v)
   if (!isValidSigRecovery(recovery)) {
     throw new Error('Invalid signature v value')
   }
@@ -53,8 +43,8 @@ export const ecrecover = function(
  * Convert signature parameters into the format of `eth_sign` RPC method.
  * @returns Signature
  */
-export const toRpcSig = function(v: number, r: Buffer, s: Buffer, chainId?: number): string {
-  const recovery = calculateSigRecovery(v, chainId)
+export const toRpcSig = function(v: number, r: Buffer, s: Buffer): string {
+  const recovery = calculateSigRecovery(v)
   if (!isValidSigRecovery(recovery)) {
     throw new Error('Invalid signature v value')
   }
@@ -97,7 +87,6 @@ export const isValidSignature = function(
   r: Buffer,
   s: Buffer,
   homesteadOrLater: boolean = true,
-  chainId?: number,
 ): boolean {
   const SECP256K1_N_DIV_2 = new BN(
     '7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0',
@@ -109,7 +98,7 @@ export const isValidSignature = function(
     return false
   }
 
-  if (!isValidSigRecovery(calculateSigRecovery(v, chainId))) {
+  if (!isValidSigRecovery(calculateSigRecovery(v))) {
     return false
   }
 
@@ -138,7 +127,7 @@ export const hashPersonalMessage = function(message: Buffer): Buffer {
   return keccak(Buffer.concat([prefix, message]))
 }
 
-function calculateSigRecovery(v: number, chainId?: number): number {
+function calculateSigRecovery(v: number): number {
   return v - 27
 }
 
